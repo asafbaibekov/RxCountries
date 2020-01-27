@@ -12,6 +12,7 @@
 		2D29A3D723DE66C600EF0F78 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D29A3D523DE66C600EF0F78 /* Main.storyboard */; };
 		2D29A3D923DE66C700EF0F78 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D29A3D823DE66C700EF0F78 /* Assets.xcassets */; };
 		2D29A3DC23DE66C700EF0F78 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D29A3DA23DE66C700EF0F78 /* LaunchScreen.storyboard */; };
+		2DE1E42323DF267A0087DAE6 /* URLRequest+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE1E42223DF267A0087DAE6 /* URLRequest+Extensions.swift */; };
 		80CD64F215AD0EA721C1CCC2 /* Pods_RxCountries.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1C833CB7DD4C532ADC3CF6F /* Pods_RxCountries.framework */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +24,7 @@
 		2D29A3D823DE66C700EF0F78 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2D29A3DB23DE66C700EF0F78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2D29A3DD23DE66C700EF0F78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2DE1E42223DF267A0087DAE6 /* URLRequest+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+Extensions.swift"; sourceTree = "<group>"; };
 		8D006EBBD03C6342170D066C /* Pods-RxCountries.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxCountries.debug.xcconfig"; path = "Target Support Files/Pods-RxCountries/Pods-RxCountries.debug.xcconfig"; sourceTree = "<group>"; };
 		A3929729403FFE27B81A93F1 /* Pods-RxCountries.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxCountries.release.xcconfig"; path = "Target Support Files/Pods-RxCountries/Pods-RxCountries.release.xcconfig"; sourceTree = "<group>"; };
 		C1C833CB7DD4C532ADC3CF6F /* Pods_RxCountries.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RxCountries.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,6 +69,7 @@
 				2D29A3D823DE66C700EF0F78 /* Assets.xcassets */,
 				2D29A3DA23DE66C700EF0F78 /* LaunchScreen.storyboard */,
 				2D29A3DD23DE66C700EF0F78 /* Info.plist */,
+				2DE1E42223DF267A0087DAE6 /* URLRequest+Extensions.swift */,
 			);
 			path = RxCountries;
 			sourceTree = "<group>";
@@ -227,6 +230,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DE1E42323DF267A0087DAE6 /* URLRequest+Extensions.swift in Sources */,
 				2D29A3D423DE66C600EF0F78 /* CountriesTableViewController.swift in Sources */,
 				2D29A3D023DE66C600EF0F78 /* AppDelegate.swift in Sources */,
 			);
