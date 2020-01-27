@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  CountriesTableViewController.swift
 //  RxCountries
 //
 //  Created by Asaf Baibekov on 27/01/2020.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CountriesTableViewController: UITableViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
