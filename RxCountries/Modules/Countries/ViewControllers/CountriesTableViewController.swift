@@ -13,7 +13,16 @@ class CountriesTableViewController: UITableViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
+		setupView()
+		setupRx()
 	}
 
+	func setupView() {
+		
+	}
+
+	func setupRx() {
+		
+	}
 
 }
