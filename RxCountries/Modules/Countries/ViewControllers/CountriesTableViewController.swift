@@ -18,7 +18,12 @@ class CountriesTableViewController: UITableViewController {
 	}
 
 	func setupView() {
-		
+		self.tableView.refreshControl = UIRefreshControl()
+		self.tableView.delegate = nil
+		self.tableView.dataSource = nil
+		self.definesPresentationContext = true
+		self.clearsSelectionOnViewWillAppear = true
+		self.navigationItem.hidesSearchBarWhenScrolling = false
 	}
 
 	func setupRx() {
