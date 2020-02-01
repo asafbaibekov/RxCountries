@@ -50,7 +50,8 @@ class CountriesTableViewController: UITableViewController {
 				tableView.refreshControl!.rx
 					.controlEvent(.valueChanged)
 					.asDriver()
-			)
+			),
+			search: searchController.searchBar.rx.text.asDriver()
 		)
 
 		let output = viewModel.transform(input: input)

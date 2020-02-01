@@ -14,6 +14,7 @@ class CountriesViewModel {
 
 	struct Input {
 		let triggle: Driver<Void>
+		let search: Driver<String?>
 	}
 	struct Output {
 		let fetching: Driver<Bool>
@@ -22,11 +23,13 @@ class CountriesViewModel {
 		let countries: Driver<[CountryItemViewModel]>
 	}
 
+	private let countries: BehaviorRelay<[CountryItemViewModel]>
 	private let loading: BehaviorRelay<Bool>
 	private let error: PublishSubject<Error>
 	private var title: Observable<String> { .just("Countries") }
 
 	init() {
+		countries = BehaviorRelay<[CountryItemViewModel]>(value: [CountryItemViewModel]())
 		loading = BehaviorRelay<Bool>(value: false)
 		error = PublishSubject<Error>()
 	}
@@ -41,12 +44,17 @@ class CountriesViewModel {
 				}
 				.do(onCompleted: { self?.loading.accept(false) })
 				.map { $0.map(CountryItemViewModel.init) }
+				.do(onNext: self?.countries.accept)
+		}
+		let filteredCountries = input.search.map { string -> [CountryItemViewModel] in
+			guard let string = string, !string.isEmpty else { return self.countries.value }
+			return self.countries.value.filter { $0.country.name.lowercased().contains(string.lowercased()) }
 		}
 		return Output(
 			fetching: self.loading.asDriver(),
 			error: self.error.asDriver { _ in .empty() },
 			title: self.title.asDriver { _ in .empty() },
-			countries: countries
+			countries: Driver.merge(countries, filteredCountries)
 		)
 	}
 }
