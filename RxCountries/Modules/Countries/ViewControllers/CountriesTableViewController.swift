@@ -16,6 +16,14 @@ class CountriesTableViewController: UITableViewController {
 
 	let viewModel = CountriesViewModel()
 
+	lazy var searchController: UISearchController = {
+		let searchController = UISearchController(searchResultsController: nil)
+		searchController.obscuresBackgroundDuringPresentation = false
+		searchController.searchBar.placeholder = "Search Country"
+		searchController.searchBar.showsScopeBar = true
+		return searchController
+	}()
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
@@ -30,6 +38,7 @@ class CountriesTableViewController: UITableViewController {
 		self.definesPresentationContext = true
 		self.clearsSelectionOnViewWillAppear = true
 		self.navigationItem.hidesSearchBarWhenScrolling = false
+		self.navigationItem.searchController = searchController
 	}
 
 	func setupRx() {
