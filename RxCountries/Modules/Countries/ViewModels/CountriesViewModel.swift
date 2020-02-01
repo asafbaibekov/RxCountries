@@ -48,7 +48,7 @@ class CountriesViewModel {
 		}
 		let filteredCountries = input.search.map { string -> [CountryItemViewModel] in
 			guard let string = string, !string.isEmpty else { return self.countries.value }
-			return self.countries.value.filter { $0.country.name.lowercased().contains(string.lowercased()) }
+			return self.countries.value.filter { $0.country.name.lowercased().starts(with: string.lowercased()) }
 		}
 		return Output(
 			fetching: self.loading.asDriver(),
