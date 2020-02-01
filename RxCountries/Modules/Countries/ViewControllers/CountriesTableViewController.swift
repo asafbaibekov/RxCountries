@@ -19,6 +19,7 @@ class CountriesTableViewController: UITableViewController {
 	lazy var searchController: UISearchController = {
 		let searchController = UISearchController(searchResultsController: nil)
 		searchController.obscuresBackgroundDuringPresentation = false
+		searchController.searchBar.scopeButtonTitles = ["Name ASC", "Name DESC", "Area ASC", "Area DESC"]
 		searchController.searchBar.placeholder = "Search Country"
 		searchController.searchBar.showsScopeBar = true
 		return searchController
@@ -51,7 +52,8 @@ class CountriesTableViewController: UITableViewController {
 					.controlEvent(.valueChanged)
 					.asDriver()
 			),
-			search: searchController.searchBar.rx.text.asDriver()
+			search: searchController.searchBar.rx.text.asDriver(),
+			orderBy: searchController.searchBar.rx.selectedScopeButtonIndex.asDriver()
 		)
 
 		let output = viewModel.transform(input: input)

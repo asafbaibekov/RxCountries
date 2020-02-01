@@ -15,6 +15,7 @@ class CountriesViewModel {
 	struct Input {
 		let triggle: Driver<Void>
 		let search: Driver<String?>
+		let orderBy: Driver<Int>
 	}
 	struct Output {
 		let fetching: Driver<Bool>
@@ -50,11 +51,21 @@ class CountriesViewModel {
 			guard let string = string, !string.isEmpty else { return self.countries.value }
 			return self.countries.value.filter { $0.country.name.lowercased().starts(with: string.lowercased()) }
 		}
+		let countries_final = Driver.combineLatest(input.orderBy, Driver.merge(countries, filteredCountries))
+			.map { (int, viewModels) -> [CountryItemViewModel] in
+				switch int {
+				case 0: return viewModels.sorted(by: { $0.country.name < $1.country.name })
+				case 1: return viewModels.sorted(by: { $0.country.name > $1.country.name })
+				case 2: return viewModels.sorted(by: { $0.country.area ?? 0 < $1.country.area ?? 0 })
+				case 3: return viewModels.sorted(by: { $0.country.area ?? 0 > $1.country.area ?? 0 })
+				default: return viewModels
+				}
+			}
 		return Output(
 			fetching: self.loading.asDriver(),
 			error: self.error.asDriver { _ in .empty() },
 			title: self.title.asDriver { _ in .empty() },
-			countries: Driver.merge(countries, filteredCountries)
+			countries: countries_final
 		)
 	}
 }
