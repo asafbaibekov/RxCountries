@@ -16,7 +16,7 @@ class BordersViewModel {
 	}
 	struct Output {
 		let title: Driver<String>
-		let countries: Driver<[CountryItemViewModel]>
+		let borders: Driver<[SectionBorders]>
 	}
 
 	private let country: Country
@@ -28,9 +28,39 @@ class BordersViewModel {
 	}
 
 	func transform(input: Input) -> Output {
+		let title: Driver<String> = Driver.just(country).map { $0.name }
+		let borders = Driver.just(borderedCountries)
+			.map { countries -> [SectionBorders] in
+				let names = countries.map { country in
+					BorderItemViewModel(
+						title: country.name,
+						subtitle: {
+							guard let area = country.area else { return nil }
+							let formatter = NumberFormatter()
+							formatter.maximumFractionDigits = 2
+							return "area: \(formatter.string(from: NSNumber(floatLiteral: area))!)"
+						}()
+					)
+				}
+				let nativeNames = countries.map { country in
+					BorderItemViewModel(
+						title: country.nativeName,
+						subtitle: {
+							guard let area = country.area else { return nil }
+							let formatter = NumberFormatter()
+							formatter.maximumFractionDigits = 2
+							return "area: \(formatter.string(from: NSNumber(floatLiteral: area))!)"
+						}()
+					)
+				}
+				var sections = [SectionBorders]()
+				if !names.isEmpty { sections.append(SectionBorders(header: "Names", items: names)) }
+				if !nativeNames.isEmpty { sections.append(SectionBorders(header: "Native names", items: nativeNames)) }
+				return sections
+			}
 		return Output(
-			title: Driver.just(country).map { $0.name },
-			countries: Driver.just(borderedCountries).map { $0.map(CountryItemViewModel.init) }
+			title: title,
+			borders: borders
 		)
 	}
 }
