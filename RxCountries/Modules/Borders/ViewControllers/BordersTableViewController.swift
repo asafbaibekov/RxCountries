@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxDataSources
 
 class BordersTableViewController: UITableViewController {
 
@@ -33,18 +34,20 @@ class BordersTableViewController: UITableViewController {
 		output.title
 			.drive(navigationItem.rx.title)
 			.disposed(by: disposeBag)
-		output.countries
-			.asObservable()
-			.bind(to: tableView.rx.items) { tableView, row, viewModel in
-				let cell: UITableViewCell = {
-					if let cell = tableView.dequeueReusableCell(withIdentifier: "UITableViewCell") { return cell }
-					return UITableViewCell(style: .subtitle, reuseIdentifier: "UITableViewCell")
-				}()
-				cell.textLabel?.numberOfLines = 0
-				cell.textLabel?.text = viewModel.title
-				cell.detailTextLabel?.text = viewModel.subtitle
-				return cell
-			}
+		let dataSource = RxTableViewSectionedReloadDataSource<SectionBorders>(configureCell: { (dataSource, tableView, indexPath, item) -> UITableViewCell in
+			let cell: UITableViewCell = {
+				if let cell = tableView.dequeueReusableCell(withIdentifier: "UITableViewCell") { return cell }
+				return UITableViewCell(style: .subtitle, reuseIdentifier: "UITableViewCell")
+			}()
+			cell.textLabel?.numberOfLines = 0
+			cell.textLabel?.text = item.title
+			cell.detailTextLabel?.text = item.subtitle
+			return cell
+		}, titleForHeaderInSection: { dataSource, index in
+			dataSource.sectionModels[index].header
+		})
+		output.borders
+			.drive(tableView.rx.items(dataSource: dataSource))
 			.disposed(by: disposeBag)
 	}
 
