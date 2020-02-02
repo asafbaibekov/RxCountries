@@ -8,5 +8,6 @@ target 'RxCountries' do
   # Pods for RxCountries
   pod 'RxSwift', '~> 4.0'
   pod 'RxCocoa', '~> 4.0'
+  pod 'RxDataSources', '~> 3.0'
 
 end
