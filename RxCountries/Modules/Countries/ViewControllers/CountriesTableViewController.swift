@@ -53,7 +53,8 @@ class CountriesTableViewController: UITableViewController {
 					.asDriver()
 			),
 			search: searchController.searchBar.rx.text.asDriver(),
-			orderBy: searchController.searchBar.rx.selectedScopeButtonIndex.asDriver()
+			orderBy: searchController.searchBar.rx.selectedScopeButtonIndex.asDriver(),
+			selection: tableView.rx.itemSelected.asDriver()
 		)
 
 		let output = viewModel.transform(input: input)
@@ -79,6 +80,15 @@ class CountriesTableViewController: UITableViewController {
 				let alert = UIAlertController(title: "error", message: error.localizedDescription, preferredStyle: .alert)
 				alert.addAction(UIAlertAction(title: "OK", style: .default))
 				self?.present(alert, animated: true)
+			})
+			.disposed(by: disposeBag)
+
+		output.selectedCountry
+			.drive(onNext: { [weak self] bordersViewModel in
+				guard let self = self else { return }
+				let bordersTVC = BordersTableViewController(style: .plain)
+				bordersTVC.viewModel = bordersViewModel
+				self.navigationController?.pushViewController(bordersTVC, animated: true)
 			})
 			.disposed(by: disposeBag)
 	}

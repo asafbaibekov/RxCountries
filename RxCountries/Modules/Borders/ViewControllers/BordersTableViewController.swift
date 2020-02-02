@@ -14,6 +14,8 @@ class BordersTableViewController: UITableViewController {
 
 	var disposeBag = DisposeBag()
 
+	var viewModel: BordersViewModel!
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setupView()
@@ -26,7 +28,24 @@ class BordersTableViewController: UITableViewController {
 	}
 
 	func setupRx() {
-		
+		let input = BordersViewModel.Input()
+		let output = viewModel.transform(input: input)
+		output.title
+			.drive(navigationItem.rx.title)
+			.disposed(by: disposeBag)
+		output.countries
+			.asObservable()
+			.bind(to: tableView.rx.items) { tableView, row, viewModel in
+				let cell: UITableViewCell = {
+					if let cell = tableView.dequeueReusableCell(withIdentifier: "UITableViewCell") { return cell }
+					return UITableViewCell(style: .subtitle, reuseIdentifier: "UITableViewCell")
+				}()
+				cell.textLabel?.numberOfLines = 0
+				cell.textLabel?.text = viewModel.title
+				cell.detailTextLabel?.text = viewModel.subtitle
+				return cell
+			}
+			.disposed(by: disposeBag)
 	}
 
 }

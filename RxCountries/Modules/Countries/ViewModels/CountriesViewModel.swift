@@ -16,12 +16,14 @@ class CountriesViewModel {
 		let triggle: Driver<Void>
 		let search: Driver<String?>
 		let orderBy: Driver<Int>
+		let selection: Driver<IndexPath>
 	}
 	struct Output {
 		let fetching: Driver<Bool>
 		let error: Driver<Error>
 		let title: Driver<String>
 		let countries: Driver<[CountryItemViewModel]>
+		let selectedCountry: Driver<BordersViewModel>
 	}
 
 	private let countries: BehaviorRelay<[CountryItemViewModel]>
@@ -61,11 +63,21 @@ class CountriesViewModel {
 				default: return viewModels
 				}
 			}
+
+		let selectedCountry = input.selection.withLatestFrom(countries_final) { indexPath, viewModels -> BordersViewModel in
+			let country = viewModels[indexPath.row].country
+			let borderedCountries = country.borders.map { border in
+				self.countries.value.map { $0.country }.first { border == $0.alpha3Code }!
+			}
+			return BordersViewModel(country: country, borderedCountries: borderedCountries)
+		}
+
 		return Output(
 			fetching: self.loading.asDriver(),
 			error: self.error.asDriver { _ in .empty() },
 			title: self.title.asDriver { _ in .empty() },
-			countries: countries_final
+			countries: countries_final,
+			selectedCountry: selectedCountry
 		)
 	}
 }
