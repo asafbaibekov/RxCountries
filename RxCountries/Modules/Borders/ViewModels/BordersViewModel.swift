@@ -19,18 +19,18 @@ class BordersViewModel {
 		let countries: Driver<[CountryItemViewModel]>
 	}
 
-	let country: Driver<Country>
-	let borderedCountries: Driver<[Country]>
+	private let country: Country
+	private let borderedCountries: [Country]
 
 	init(country: Country, borderedCountries: [Country]) {
-		self.country = .just(country)
-		self.borderedCountries = .just(borderedCountries)
+		self.country = country
+		self.borderedCountries = borderedCountries
 	}
 
 	func transform(input: Input) -> Output {
 		return Output(
-			title: country.map { $0.name },
-			countries: borderedCountries.map { $0.map( CountryItemViewModel.init) }
+			title: Driver.just(country).map { $0.name },
+			countries: Driver.just(borderedCountries).map { $0.map(CountryItemViewModel.init) }
 		)
 	}
 }
