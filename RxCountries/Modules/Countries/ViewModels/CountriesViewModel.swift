@@ -28,12 +28,14 @@ class CountriesViewModel {
 
 	private let countries: BehaviorRelay<[CountryItemViewModel]>
 	private let loading: BehaviorRelay<Bool>
+	private let search: BehaviorRelay<String>
 	private let error: PublishSubject<Error>
 	private var title: Observable<String> { .just("Countries") }
 
 	init() {
 		countries = BehaviorRelay<[CountryItemViewModel]>(value: [CountryItemViewModel]())
 		loading = BehaviorRelay<Bool>(value: false)
+		search = BehaviorRelay<String>(value: "")
 		error = PublishSubject<Error>()
 	}
 
@@ -49,12 +51,14 @@ class CountriesViewModel {
 				.map { $0.map(CountryItemViewModel.init) }
 				.do(onNext: self?.countries.accept)
 		}
-		let filteredCountries = input.search.map { string -> [CountryItemViewModel] in
-			guard let string = string, !string.isEmpty else { return self.countries.value }
-			return self.countries.value.filter { $0.country.name.lowercased().starts(with: string.lowercased()) }
-		}
-		let countries_final = Driver.combineLatest(input.orderBy, Driver.merge(countries, filteredCountries))
-			.map { (int, viewModels) -> [CountryItemViewModel] in
+
+		let countries_final = Driver.combineLatest(
+			input.orderBy,
+			input.search.map { $0 ?? "" },
+			countries
+		)
+			.map { (int, string, viewModels) -> [CountryItemViewModel] in
+				let viewModels = viewModels.filter { $0.country.name.lowercased().starts(with: string.lowercased()) }
 				switch int {
 				case 0: return viewModels.sorted(by: { $0.country.name < $1.country.name })
 				case 1: return viewModels.sorted(by: { $0.country.name > $1.country.name })
