@@ -52,7 +52,7 @@ class CountriesTableViewController: UITableViewController {
 					.controlEvent(.valueChanged)
 					.asDriver()
 			),
-			search: searchController.searchBar.rx.text.asDriver(),
+			search: searchController.searchBar.rx.text.orEmpty.asDriver(),
 			orderBy: searchController.searchBar.rx.selectedScopeButtonIndex.asDriver(),
 			selection: tableView.rx.itemSelected.asDriver()
 		)

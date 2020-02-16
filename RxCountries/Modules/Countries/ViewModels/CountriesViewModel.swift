@@ -14,7 +14,7 @@ class CountriesViewModel {
 
 	struct Input {
 		let triggle: Driver<Void>
-		let search: Driver<String?>
+		let search: Driver<String>
 		let orderBy: Driver<Int>
 		let selection: Driver<IndexPath>
 	}
@@ -52,11 +52,7 @@ class CountriesViewModel {
 				.do(onNext: self?.countries.accept)
 		}
 
-		let countries_final = Driver.combineLatest(
-			input.orderBy,
-			input.search.map { $0 ?? "" },
-			countries
-		)
+		let countries_final = Driver.combineLatest(input.orderBy, input.search, countries)
 			.map { (int, string, viewModels) -> [CountryItemViewModel] in
 				let viewModels = viewModels.filter { $0.country.name.lowercased().starts(with: string.lowercased()) }
 				switch int {
