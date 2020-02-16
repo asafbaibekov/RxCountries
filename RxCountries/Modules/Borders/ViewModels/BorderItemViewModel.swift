@@ -14,8 +14,13 @@ class BorderItemViewModel {
 	let title: String
 	let subtitle: String?
 
-	init(title: String, subtitle: String?) {
+	init(title: String, area: Double?) {
 		self.title = title
-		self.subtitle = subtitle
+		self.subtitle = {
+			guard let area = area else { return nil }
+			let formatter = NumberFormatter()
+			formatter.maximumFractionDigits = 2
+			return "area: \(formatter.string(from: NSNumber(floatLiteral: area))!)"
+		}()
 	}
 }

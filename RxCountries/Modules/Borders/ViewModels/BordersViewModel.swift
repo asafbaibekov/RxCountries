@@ -32,26 +32,10 @@ class BordersViewModel {
 		let borders = Driver.just(borderedCountries)
 			.map { countries -> [SectionBorders] in
 				let names = countries.map { country in
-					BorderItemViewModel(
-						title: country.name,
-						subtitle: {
-							guard let area = country.area else { return nil }
-							let formatter = NumberFormatter()
-							formatter.maximumFractionDigits = 2
-							return "area: \(formatter.string(from: NSNumber(floatLiteral: area))!)"
-						}()
-					)
+					BorderItemViewModel(title: country.name, area: country.area)
 				}
 				let nativeNames = countries.map { country in
-					BorderItemViewModel(
-						title: country.nativeName,
-						subtitle: {
-							guard let area = country.area else { return nil }
-							let formatter = NumberFormatter()
-							formatter.maximumFractionDigits = 2
-							return "area: \(formatter.string(from: NSNumber(floatLiteral: area))!)"
-						}()
-					)
+					BorderItemViewModel(title: country.nativeName, area: country.area)
 				}
 				var sections = [SectionBorders]()
 				if !names.isEmpty { sections.append(SectionBorders(header: "Names", items: names)) }
