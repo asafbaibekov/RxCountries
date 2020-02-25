@@ -13,10 +13,10 @@ import RxCocoa
 class CountriesViewModel {
 
 	struct Input {
-		let triggle: Driver<Void>
-		let search: Driver<String>
-		let orderBy: Driver<Int>
-		let selection: Driver<IndexPath>
+		let triggle: Observable<Void>
+		let search: Observable<String>
+		let orderBy: Observable<Int>
+		let selection: Observable<IndexPath>
 	}
 	struct Output {
 		let fetching: Driver<Bool>
@@ -55,7 +55,7 @@ class CountriesViewModel {
 				.do(onNext: self?.countries.accept)
 		}
 
-		let countries_final = Driver.combineLatest(input.orderBy, input.search, countries)
+		let countries_final = Observable.combineLatest(input.orderBy, input.search, countries)
 			.map { (int, string, viewModels) -> [CountryItemViewModel] in
 				let viewModels = viewModels.filter { $0.country.name.lowercased().starts(with: string.lowercased()) }
 				switch int {
@@ -79,8 +79,8 @@ class CountriesViewModel {
 			fetching: self.loading.asDriver(),
 			error: self.error.asDriver { _ in .empty() },
 			title: self.title.asDriver { _ in .empty() },
-			countries: countries_final,
-			selectedCountry: selectedCountry
+			countries: countries_final.asDriver { _ in .empty() },
+			selectedCountry: selectedCountry.asDriver { _ in .empty() }
 		)
 	}
 }

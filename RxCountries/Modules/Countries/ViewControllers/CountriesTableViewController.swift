@@ -44,17 +44,13 @@ class CountriesTableViewController: UITableViewController {
 
 	func setupRx() {
 		let input = CountriesViewModel.Input(
-			triggle: Driver.merge(
-				rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
-					.map({ _ in })
-					.asDriver(onErrorJustReturn: ()),
-				tableView.refreshControl!.rx
-					.controlEvent(.valueChanged)
-					.asDriver()
+			triggle: .merge(
+				rx.sentMessage(#selector(UIViewController.viewWillAppear(_:))).map({ _ in }),
+				tableView.refreshControl!.rx.controlEvent(.valueChanged).asObservable()
 			),
-			search: searchController.searchBar.rx.text.orEmpty.asDriver(),
-			orderBy: searchController.searchBar.rx.selectedScopeButtonIndex.asDriver(),
-			selection: tableView.rx.itemSelected.asDriver()
+			search: searchController.searchBar.rx.text.orEmpty.asObservable(),
+			orderBy: searchController.searchBar.rx.selectedScopeButtonIndex.asObservable(),
+			selection: tableView.rx.itemSelected.asObservable()
 		)
 
 		let output = viewModel.transform(input: input)
