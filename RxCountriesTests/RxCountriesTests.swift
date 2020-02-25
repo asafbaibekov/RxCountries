@@ -37,5 +37,17 @@ class RxCountriesTests: XCTestCase {
 }
 
 extension RxCountriesTests: CountryService {
-	func getCountries() -> Observable<[Country]> { .just([]) }
+	func getCountries() -> Observable<[Country]> { .just([spainCountry, israelCountry, franceCountry]) }
+}
+
+private extension RxCountriesTests {
+	var franceCountry: Country {
+		Country(name: "France", nativeName: "France", alpha3Code: "FRA", borders: ["AND", "BEL", "DEU", "ITA", "LUX", "MCO", "ESP", "CHE"], area: 640679)
+	}
+	var spainCountry: Country {
+		Country(name: "Spain", nativeName: "España", alpha3Code: "ESP", borders: ["AND", "FRA", "GIB", "PRT", "MAR"], area: 505992)
+	}
+	var israelCountry: Country {
+		Country(name: "Israel", nativeName: "יִשְׂרָאֵל", alpha3Code: "ISR", borders: ["EGY", "JOR", "LBN", "SYR"], area: 20770)
+	}
 }
