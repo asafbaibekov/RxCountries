@@ -14,7 +14,7 @@ class CountriesTableViewController: UITableViewController {
 
 	let disposeBag = DisposeBag()
 
-	let viewModel = CountriesViewModel()
+	lazy var viewModel = CountriesViewModel(countryService: self)
 
 	lazy var searchController: UISearchController = {
 		let searchController = UISearchController(searchResultsController: nil)
@@ -93,4 +93,14 @@ class CountriesTableViewController: UITableViewController {
 			.disposed(by: disposeBag)
 	}
 
+}
+
+extension CountriesTableViewController: CountryService {
+	func getCountries() -> Observable<[Country]> {
+		let url = URL(string: "https://restcountries.eu/rest/v2/all")!
+		let res = Resource<[Country]>(url: url)
+		return URLRequest
+			.load(resource: res)
+			.observeOn(MainScheduler.instance)
+	}
 }

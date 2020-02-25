@@ -26,22 +26,25 @@ class CountriesViewModel {
 		let selectedCountry: Driver<BordersViewModel>
 	}
 
+	private let countryService: CountryService
+
 	private let countries: BehaviorRelay<[CountryItemViewModel]>
 	private let loading: BehaviorRelay<Bool>
 	private let search: BehaviorRelay<String>
 	private let error: PublishSubject<Error>
 	private var title: Observable<String> { .just("Countries") }
 
-	init() {
+	init(countryService: CountryService) {
 		countries = BehaviorRelay<[CountryItemViewModel]>(value: [CountryItemViewModel]())
 		loading = BehaviorRelay<Bool>(value: false)
 		search = BehaviorRelay<String>(value: "")
 		error = PublishSubject<Error>()
+		self.countryService = countryService
 	}
 
 	func transform(input: Input) -> Output {
 		let countries = input.triggle.flatMapLatest { [weak self] _ in
-			return Country.getCountries()
+			return (self?.countryService.getCountries() ?? .just([]))
 				.asDriver { [weak self] error in
 					self?.loading.accept(false)
 					self?.error.onNext(error)

@@ -18,12 +18,6 @@ struct Country: Decodable {
 	let area: Double?
 }
 
-extension Country {
-	static func getCountries() -> Observable<[Country]> {
-		let url = URL(string: "https://restcountries.eu/rest/v2/all")!
-		let res = Resource<[Country]>(url: url)
-		return URLRequest
-			.load(resource: res)
-			.observeOn(MainScheduler.instance)
-	}
+protocol CountryService {
+	func getCountries() -> Observable<[Country]>
 }
