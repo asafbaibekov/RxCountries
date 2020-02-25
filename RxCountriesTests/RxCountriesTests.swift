@@ -34,6 +34,57 @@ class RxCountriesTests: XCTestCase {
 		disposeBag = nil
     }
 
+	func testOrderByCountries() {
+		let countries = scheduler.createObserver([Country].self)
+		let orderBySubject = PublishSubject<Int>()
+
+		let input = CountriesViewModel.Input(
+			triggle: .just(()),
+			search: .just(""),
+			orderBy: orderBySubject.asObservable(),
+			selection: .empty()
+		)
+		let output = viewModel.transform(input: input)
+		
+		output.countries
+			.map { $0.map { $0.country } }
+			.drive(countries)
+			.disposed(by: disposeBag)
+		
+		scheduler.createColdObservable([
+			.next(0, 0),
+			.next(10, 1),
+			.next(20, 2),
+			.next(30, 3)
+		])
+		.bind(to: orderBySubject)
+		.disposed(by: disposeBag)
+		
+		scheduler.start()
+		
+		XCTAssertEqual(countries.events, [
+			.next(0, [
+				franceCountry,
+				israelCountry,
+				spainCountry
+			]),
+			.next(10, [
+				spainCountry,
+				israelCountry,
+				franceCountry
+			]),
+			.next(20, [
+				israelCountry,
+				spainCountry,
+				franceCountry
+			]),
+			.next(30, [
+				franceCountry,
+				spainCountry,
+				israelCountry
+			])
+		])
+	}
 }
 
 extension RxCountriesTests: CountryService {
