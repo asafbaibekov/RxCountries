@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-struct Country: Decodable {
+struct Country: Decodable, Equatable {
 	let name: String
 	let nativeName: String
 	let alpha3Code: String

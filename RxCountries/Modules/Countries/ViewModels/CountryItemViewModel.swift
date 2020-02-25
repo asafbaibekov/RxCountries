@@ -30,3 +30,9 @@ class CountryItemViewModel {
 	}
 
 }
+
+extension CountryItemViewModel: Equatable {
+	static func == (lhs: CountryItemViewModel, rhs: CountryItemViewModel) -> Bool {
+		lhs.country == rhs.country
+	}
+}
